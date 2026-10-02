@@ -1,1 +1,42 @@
-
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بوصلة القبلة السوداء</title>
+<style>
+body{margin:0;background:#000;color:#fff;font-family:sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.card{background:#101010;padding:20px;border-radius:24px;width:92%;max-width:360px;text-align:center;border:1px solid #222}
+#compass{width:270px;height:270px;border:10px solid #000;border-radius:50%;margin:15px auto;position:relative;background:#000;box-shadow:inset 0 0 20px #222,0 0 0 3px #222,0 0 0 7px #000}
+#arrow{position:absolute;top:50%;left:50%;width:10px;height:170px;background:linear-gradient(red 50%, #00aaff 50%);border-radius:10px;transform:translate(-50%,-100%) rotate(0deg);transform-origin:bottom;box-shadow:0 0 10px #fff}
+#kaaba{position:absolute;top:50%;left:50%;font-size:32px;transform:translate(-50%,-50%);z-index:10}
+button{width:100%;padding:14px;background:#fff;color:#000;border:none;border-radius:12px;font-size:18px;font-weight:bold}
+#info{color:#facc15;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>🕋 بوصلة القبلة</h2>
+<div id="compass"><div id="arrow"></div><div id="kaaba">🕋</div></div>
+<div id="info">دوس شغل و وجه التلفون</div>
+<button onclick="start()">▶️ شغل البوصلة</button>
+</div>
+<script>
+let q=0;const kLat=21.4225,kLng=39.8262;
+function calc(a,b){return Math.atan2(Math.sin((kLng-b)*Math.PI/180),Math.cos(a*Math.PI/180)*Math.tan(kLat*Math.PI/180)-Math.sin(a*Math.PI/180)*Math.cos((kLng-b)*Math.PI/180))*180/Math.PI}
+function start(){
+document.getElementById('info').innerHTML='جاري...';
+navigator.geolocation.getCurrentPosition(p=>{
+q=calc(p.coords.latitude,p.coords.longitude);
+document.getElementById('info').innerHTML='الاحمر=شمال<br>خلي 🕋 مقابل الازرق';
+window.addEventListener('deviceorientation',e=>{
+let h=e.webkitCompassHeading||(360-e.alpha);
+if(h){
+document.getElementById('arrow').style.transform=`translate(-50%,-100%) rotate(${h}deg)`;
+document.getElementById('kaaba').style.transform=`translate(-50%,-50%) rotate(${q-h}deg) translateY(-100px) rotate(${-(q-h)}deg)`;
+}
+},true)
+},()=>alert('فعل الموقع'))}
+</script>
+</body>
+  </html>
